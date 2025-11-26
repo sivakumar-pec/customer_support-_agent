@@ -130,3 +130,12 @@ def calculate(a, b, operation="add"):
 def simple_search(query):
     """Simulated search tool"""
     return f"Result found for query: '{query}'"
+    def log_task(task_name):
+    with open("tasks.log", "a") as f:
+        f.write(task_name + "\n")
+
+    return "Task logged successfully."
+
+
+def calculate(a, b):
+    return a + b
