@@ -36,7 +36,7 @@ class OrchestratorAgent:
         log = log_task(task)
         print("Tool:", log)
 
-        print("\n✅ Task Successfully Processed by Multi-Agent System")
+        print("\n Task Successfully Processed by Multi-Agent System")
 
 
 if __name__ == "__main__":
