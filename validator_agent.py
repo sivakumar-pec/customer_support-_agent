@@ -54,3 +54,17 @@ if __name__ == "__main__":
     sample_data = {"title": "Daily Report", "content": "All operations normal."}
     result = validator.validate(sample_data)
     print(result)
+
+class ValidatorAgent:
+    """
+    This agent checks and validates user input or reports.
+    """
+
+    def validate_text(self, text):
+        if not text or len(text.strip()) == 0:
+            return False, "The input text is empty."
+
+        if len(text) < 10:
+            return False, "The input is too short to be valid."
+
+        return True, "Validation passed: Text is valid."
