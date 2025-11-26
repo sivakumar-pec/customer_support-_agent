@@ -1,70 +1,45 @@
-"""
-Validator Agent
-
-This agent is responsible for:
-- Checking data accuracy
-- Validating reports or documents
-- Ensuring required fields are filled
-- Flagging missing or incorrect information
-"""
+# validator_agent.py
+# This agent checks and validates text, reports or task data
 
 class ValidatorAgent:
     def __init__(self):
-        self.validation_rules = []
-
-    def add_rule(self, rule_name, rule_function):
-        """
-        Add a custom validation rule.
-        rule_function should return True/False.
-        """
-        self.validation_rules.append({"name": rule_name, "rule": rule_function})
-
-    def validate(self, data):
-        """
-        Validate the provided data using all rules.
-        Returns a list of errors (if any)
-        """
-        errors = []
-
-        for rule in self.validation_rules:
-            if not rule["rule"](data):
-                errors.append(f"❌ Validation failed: {rule['name']}")
-
-        if not errors:
-            return ["✅ All validations passed."]
-        return errors
-
-
-# Example rules (optional to include)
-
-def rule_not_empty(data):
-    """Check if data is not empty."""
-    return bool(data and len(data) > 0)
-
-def rule_contains_required_field(data):
-    """Check if data has a 'title' field."""
-    return "title" in data
-
-# Example usage
-if __name__ == "__main__":
-    validator = ValidatorAgent()
-    validator.add_rule("Data should not be empty", rule_not_empty)
-    validator.add_rule("Data must contain 'title'", rule_contains_required_field)
-
-    sample_data = {"title": "Daily Report", "content": "All operations normal."}
-    result = validator.validate(sample_data)
-    print(result)
-
-class ValidatorAgent:
-    """
-    This agent checks and validates user input or reports.
-    """
+        self.name = "Validator Agent"
 
     def validate_text(self, text):
+        """
+        Simple validation rules:
+        - Not empty
+        - Must be at least 10 characters
+        - Should not contain 'error', 'fail', 'fake'
+        """
         if not text or len(text.strip()) == 0:
-            return False, "The input text is empty."
+            return {
+                "status": "Invalid",
+                "reason": "Text is empty"
+            }
 
         if len(text) < 10:
-            return False, "The input is too short to be valid."
+            return {
+                "status": "Invalid",
+                "reason": "Text is too short"
+            }
 
-        return True, "Validation passed: Text is valid."
+        bad_words = ["error", "fail", "fake"]
+        for word in bad_words:
+            if word in text.lower():
+                return {
+                    "status": "Invalid",
+                    "reason": f"Text contains restricted word: {word}"
+                }
+
+        return {
+            "status": "Valid",
+            "reason": "Text passed all validation checks"
+        }
+
+
+# Testing the agent directly (optional)
+if __name__ == "__main__":
+    agent = ValidatorAgent()
+    test_text = "This report is correct and verified"
+    print(agent.validate_text(test_text))
