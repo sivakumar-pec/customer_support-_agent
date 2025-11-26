@@ -1,47 +1,43 @@
-
 from scheduler_agent import SchedulerAgent
 from resource_agent import ResourceAgent
 from validator_agent import ValidatorAgent
 from memory import MemoryBank
-from tools import get_current_time, simple_search
+from tools import log_task
 
-def main():
-    print("\n===== ENTERPRISE WORKFLOW AUTOMATION AGENT =====\n")
 
-    memory = MemoryBank()
+class OrchestratorAgent:
 
-    scheduler = SchedulerAgent()
-    resource = ResourceAgent()
-    validator = ValidatorAgent()
+    def __init__(self):
+        self.scheduler = SchedulerAgent()
+        self.resource = ResourceAgent()
+        self.validator = ValidatorAgent()
+        self.memory = MemoryBank()
 
-    # Example task
-    task = "Prepare weekly enterprise report"
-    print(f"Task Received: {task}")
+    def run(self):
+        print("\n--- Enterprise AI Agent Started ---")
 
-    # Save to memory
-    memory.store("last_task", task)
+        task = input("Enter your task: ")
 
-    # Step 1: Scheduling
-    schedule = scheduler.create_schedule(task)
-    print(f"Schedule Created: {schedule}")
+        valid, message = self.validator.validate_text(task)
+        print("Validator:", message)
 
-    # Step 2: Get resource info
-    resources = resource.fetch_resources(task)
-    print(f"Resources Fetched: {resources}")
+        if not valid:
+            return
 
-    # Step 3: Validate output
-    is_valid = validator.validate(schedule)
-    print(f"Validation: {is_valid}")
+        self.memory.store(task)
+        print("Memory: Task stored")
 
-    # Step 4: Use Tool
-    time = get_current_time()
-    print(f"Current Time: {time}")
+        time = self.scheduler.schedule_task(task)
+        print(f"Scheduler: Task scheduled at {time}")
 
-    # Step 5: Search using tool
-    search_result = simple_search("Enterprise process automation")
-    print(f"Search Result: {search_result}")
+        resource = self.resource.get_resource(task)
+        print("Resource Agent:", resource)
 
-    print("\n===== TASK COMPLETED SUCCESSFULLY =====\n")
+        log = log_task(task)
+        print("Tool:", log)
+
+        print("\n✅ Task Successfully Processed by Multi-Agent System")
+
 
 if __name__ == "__main__":
-    main()
+
