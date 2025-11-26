@@ -33,3 +33,11 @@ class ResourceAgent:
             "status": "Completed",
             "generated_at": "Today"
         }
+        class ResourceAgent:
+    """
+    This agent fetches or simulates external resources.
+    """
+
+    def get_resource(self, query):
+        # For now, we simulate a response instead of using real APIs
+        return f"Resource data found for: {query}"
