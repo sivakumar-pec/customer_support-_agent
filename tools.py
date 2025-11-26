@@ -108,4 +108,25 @@ TOOLS = {
     "json_validator": validate_json_structure,
     "calculator": calculate
 }
+import datetime
 
+def get_current_time():
+    """Returns the current date and time"""
+    return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+def calculate(a, b, operation="add"):
+    """Simple calculation tool"""
+    if operation == "add":
+        return a + b
+    elif operation == "subtract":
+        return a - b
+    elif operation == "multiply":
+        return a * b
+    elif operation == "divide":
+        return a / b if b != 0 else "Cannot divide by zero"
+    else:
+        return "Invalid operation"
+
+def simple_search(query):
+    """Simulated search tool"""
+    return f"Result found for query: '{query}'"
