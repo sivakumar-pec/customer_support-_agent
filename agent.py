@@ -1,43 +1,47 @@
+
 from scheduler_agent import SchedulerAgent
 from resource_agent import ResourceAgent
 from validator_agent import ValidatorAgent
 from memory import MemoryBank
+from tools import get_current_time, simple_search
 
+def main():
+    print("\n===== ENTERPRISE WORKFLOW AUTOMATION AGENT =====\n")
 
-class OrchestratorAgent:
-    """
-    Main orchestrator that coordinates all sub-agents.
-    """
+    memory = MemoryBank()
 
-    def __init__(self):
-        self.memory = MemoryBank()
-        self.scheduler = SchedulerAgent(self.memory)
-        self.resource = ResourceAgent(self.memory)
-        self.validator = ValidatorAgent(self.memory)
+    scheduler = SchedulerAgent()
+    resource = ResourceAgent()
+    validator = ValidatorAgent()
 
-    def run(self, task):
-        print("\n===== ENTERPRISE WORKFLOW AUTOMATION AGENT =====")
+    # Example task
+    task = "Prepare weekly enterprise report"
+    print(f"Task Received: {task}")
 
-        # Step 1: Save user request to memory
-        self.memory.save("latest_task", task)
+    # Save to memory
+    memory.store("last_task", task)
 
-        # Step 2: Routing logic
-        if "schedule" in task.lower():
-            return self.scheduler.handle(task)
+    # Step 1: Scheduling
+    schedule = scheduler.create_schedule(task)
+    print(f"Schedule Created: {schedule}")
 
-        elif "fetch" in task.lower() or "get" in task.lower():
-            return self.resource.handle(task)
+    # Step 2: Get resource info
+    resources = resource.fetch_resources(task)
+    print(f"Resources Fetched: {resources}")
 
-        elif "check" in task.lower() or "validate" in task.lower():
-            return self.validator.handle(task)
+    # Step 3: Validate output
+    is_valid = validator.validate(schedule)
+    print(f"Validation: {is_valid}")
 
-        else:
-            return "I can only schedule tasks, fetch info, or validate documents at the moment."
+    # Step 4: Use Tool
+    time = get_current_time()
+    print(f"Current Time: {time}")
 
+    # Step 5: Search using tool
+    search_result = simple_search("Enterprise process automation")
+    print(f"Search Result: {search_result}")
+
+    print("\n===== TASK COMPLETED SUCCESSFULLY =====\n")
 
 if __name__ == "__main__":
-    agent = OrchestratorAgent()
-    while True:
-        user_input = input("\nEnter your request: ")
-        response = agent.run(user_input)
-        print("\nAgent Response:", response)
+    main()
